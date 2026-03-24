@@ -22,20 +22,9 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow non-browser requests (Postman/curl/server-to-server)
-    if (!origin) return callback(null, true);
-
-    // Allow configured origins and localhost dev ports
-    const localhostPattern = /^https?:\/\/(localhost|127\.0\.0\.1):(\d+)$/;
-    if (allowedOrigins.includes(origin) || localhostPattern.test(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(new Error(`CORS blocked for origin: ${origin}`));
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true
 }));
 
 const limiter     = rateLimit({ windowMs: 15*60*1000, max: 100, standardHeaders: true, legacyHeaders: false });
