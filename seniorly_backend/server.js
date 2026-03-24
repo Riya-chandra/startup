@@ -12,7 +12,11 @@ const app = express();
 // ── Security ──────────────────────────────────────────────────────────────
 app.use(helmet());
 app.use(cors({
-  origin:[ 'http://127.0.0.1:3000' || 'http://localhost:3000'],
+  origin: [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://startup-xxxxx.vercel.app"
+  ],
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'],
 }));
