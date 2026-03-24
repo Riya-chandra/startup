@@ -11,14 +11,31 @@ const app = express();
 
 // ── Security ──────────────────────────────────────────────────────────────
 app.use(helmet());
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'http://localhost:3001',
+  'http://127.0.0.1:3001',
+  'https://startup-xxxxx.vercel.app',
+  process.env.CLIENT_URL,
+  process.env.ADMIN_CLIENT_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://startup-xxxxx.vercel.app"
-  ],
+  origin: (origin, callback) => {
+    // Allow non-browser requests (Postman/curl/server-to-server)
+    if (!origin) return callback(null, true);
+
+    // Allow configured origins and localhost dev ports
+    const localhostPattern = /^https?:\/\/(localhost|127\.0\.0\.1):(\d+)$/;
+    if (allowedOrigins.includes(origin) || localhostPattern.test(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true,
-  methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 }));
 
 const limiter     = rateLimit({ windowMs: 15*60*1000, max: 100, standardHeaders: true, legacyHeaders: false });
@@ -46,6 +63,7 @@ app.use('/api/webinars',    require('./routes/webinarRoutes'));
 app.use('/api/sessions',    require('./routes/sessionRoutes'));
 app.use('/api/enrollments', require('./routes/enrollmentRoutes'));
 app.use('/api/emails',      require('./routes/emailRoutes'));
+app.use('/api/admin',       require('./routes/adminRoutes'));
 
 // ── 404 ───────────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` }));

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const connectDB = require('../config/db');
 const User    = require('../models/User');
 const Webinar = require('../models/Webinar');
 const Session = require('../models/Session');
@@ -7,8 +8,7 @@ const Enrollment = require('../models/Enrollment');
 const EmailSubscription = require('../models/EmailSubscription');
 
 const seed = async () => {
-  await mongoose.connect(process.env.MONGODB_URI);
-  console.log('✅ Connected to MongoDB');
+  await connectDB();
 
   // Clear all
   await Promise.all([
