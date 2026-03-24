@@ -14,7 +14,7 @@
     "build": "react-scripts build"
   },
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
   },
   "browserslist": {
     "production": [
