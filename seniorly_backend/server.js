@@ -27,6 +27,9 @@ app.use('/api/users/register', authLimiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
 // ── Health check ──────────────────────────────────────────────────────────
 app.get('/health', (_, res) => res.json({
   success: true, app: 'Seniorly API', version: '1.0.0',
