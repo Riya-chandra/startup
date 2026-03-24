@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// Get API URL from env, warn if not set in production
+const getAPIUrl = () => {
+  const url = process.env.REACT_APP_API_URL;
+  if (!url && process.env.NODE_ENV === 'production') {
+    console.error('⚠️ REACT_APP_API_URL not set in production. Login will fail.');
+    return null;
+  }
+  return url || 'http://localhost:5000';
+};
+const API = getAPIUrl();
 
 function Overlay({ children, onClose }) {
   return (
@@ -79,7 +88,14 @@ export function LoginModal({ onClose, onSwitch, onSuccess }) {
       localStorage.setItem('seniorly_user', JSON.stringify(data.user));
       onSuccess(`Welcome back, ${data.user.firstName}!`);
     } catch (err) {
-      setError('Cannot connect to server. Is backend running?');
+      console.error('Login error:', err);
+      if (!API) {
+        setError('🔧 Backend URL not configured. Ask admin to set REACT_APP_API_URL.');
+      } else if (err.message.includes('fetch')) {
+        setError(`Cannot reach backend at ${API}. Check your internet or backend status.`);
+      } else {
+        setError('Connection failed. ' + (err.message || 'Please try again'));
+      }
     } finally {
       setLoading(false);
     }
@@ -135,7 +151,14 @@ export function RegisterModal({ onClose, onSwitch, onSuccess }) {
       localStorage.setItem('seniorly_user', JSON.stringify(data.user));
       onSuccess(`Welcome to Seniorly, ${data.user.firstName}!`);
     } catch (err) {
-      setError('Cannot connect to server. Is backend running on port 5000?');
+      console.error('Register error:', err);
+      if (!API) {
+        setError('🔧 Backend URL not configured. Ask admin to set REACT_APP_API_URL.');
+      } else if (err.message.includes('fetch')) {
+        setError(`Cannot reach backend at ${API}. Check your internet or backend status.`);
+      } else {
+        setError('Connection failed. ' + (err.message || 'Please try again'));
+      }
     } finally {
       setLoading(false);
     }

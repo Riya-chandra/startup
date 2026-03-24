@@ -1,7 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './App.css';
 
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// Get API URL from env, warn if not set in production
+const getAPIUrl = () => {
+  const url = process.env.REACT_APP_API_URL;
+  if (!url && process.env.NODE_ENV === 'production') {
+    console.error('⚠️ REACT_APP_API_URL not set in production. Admin panel will not work.');
+    return null;
+  }
+  return url || 'http://localhost:5000';
+};
+const API = getAPIUrl();
 
 const sessionStatuses = ['upcoming', 'live', 'completed', 'cancelled'];
 const webinarStatuses = ['draft', 'published', 'archived'];
