@@ -16,7 +16,7 @@ const allowedOrigins = [
   'http://127.0.0.1:3000',
   'http://localhost:3001',
   'http://127.0.0.1:3001',
-  'https://startup-xxxxx.vercel.app',
+  'startup-26n8215sm-xxxs-projects-056b9225.vercel.app',
   process.env.CLIENT_URL,
   process.env.ADMIN_CLIENT_URL,
 ].filter(Boolean);
