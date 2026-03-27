@@ -22,6 +22,8 @@ export default function Navbar({ onLogin, onRegister }) {
     return () => window.removeEventListener('seniorly_auth', handleUserChange);
   }, []);
 
+  const logoUrl = `${process.env.PUBLIC_URL || ''}/seniorly_logo.png`;
+
   const handleLogout = () => {
     localStorage.removeItem('seniorly_token');
     localStorage.removeItem('seniorly_user');
@@ -38,9 +40,9 @@ export default function Navbar({ onLogin, onRegister }) {
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
       padding: '0 5%',
-      background: scrolled ? 'rgba(255,255,255,0.97)' : 'rgba(0,0,0,0.15)',
+      background: '#8b6ff0',
       backdropFilter: 'blur(16px)',
-      borderBottom: scrolled ? '1px solid #e2e4ee' : '1px solid rgba(255,255,255,0.1)',
+      borderBottom: '1px solid rgba(255,255,255,0.1)',
       transition: 'all 0.3s ease',
       height: 68,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -49,17 +51,16 @@ export default function Navbar({ onLogin, onRegister }) {
       {/* ── LOGO ── */}
       <a href="#" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
         <img
-          src="/Logo.png"
+          src={logoUrl}
           alt="Seniorly"
           style={{
             height: 44,
             width: 'auto',
             objectFit: 'contain',
-            // Dark logo on scrolled white bg, light/original on purple hero
-            filter: scrolled
-              ? 'brightness(0) invert(0)'         // dark/original on white
-              : 'brightness(0) invert(1)',          // white on purple
-            transition: 'filter 0.3s ease',
+            marginRight: 12,
+            // Make sure logo is visible on both transparent and white nav backgrounds
+            filter: 'none',
+            transition: 'all 0.3s ease',
           }}
         />
       </a>
@@ -74,8 +75,8 @@ export default function Navbar({ onLogin, onRegister }) {
                 display: 'flex', alignItems: 'center', gap: 8,
                 padding: '0.38rem 0.75rem 0.38rem 0.38rem',
                 borderRadius: 50,
-                background: scrolled ? '#f0edff' : 'rgba(255,255,255,0.15)',
-                border: scrolled ? '1px solid #d4c9ff' : '1px solid rgba(255,255,255,0.35)',
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.35)',
                 cursor: 'pointer', transition: 'all 0.2s',
               }}>
               <div style={{
@@ -86,9 +87,9 @@ export default function Navbar({ onLogin, onRegister }) {
               }}>{initials}</div>
               <span style={{
                 fontSize: '0.85rem', fontWeight: 500,
-                color: scrolled ? '#1a1a2e' : '#fff',
+                color: '#fff',
               }}>{user.firstName}</span>
-              <span style={{ fontSize: '0.55rem', color: scrolled ? '#888' : 'rgba(255,255,255,0.7)' }}>▼</span>
+              <span style={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.7)' }}>▼</span>
             </button>
 
             {dropdownOpen && (
@@ -139,15 +140,15 @@ export default function Navbar({ onLogin, onRegister }) {
           <>
             <button onClick={onLogin} style={{
               padding: '0.48rem 1.2rem', borderRadius: 50,
-              border: `1px solid ${scrolled ? '#d0d0e0' : 'rgba(255,255,255,0.5)'}`,
-              color: scrolled ? '#444466' : '#fff',
+              border: '1px solid rgba(255,255,255,0.5)',
+              color: '#fff',
               background: 'transparent', fontSize: '0.85rem', fontWeight: 500,
               transition: 'all 0.2s', cursor: 'pointer',
             }}>Log in</button>
             <button onClick={onRegister} style={{
               padding: '0.48rem 1.25rem', borderRadius: 50,
-              background: scrolled ? '#6C4EE4' : '#fff',
-              color: scrolled ? '#fff' : '#6C4EE4',
+              background: '#fff',
+              color: '#6C4EE4',
               fontSize: '0.85rem', fontWeight: 600,
               border: 'none', cursor: 'pointer', transition: 'all 0.2s',
               boxShadow: '0 2px 10px rgba(108,78,228,0.25)',
